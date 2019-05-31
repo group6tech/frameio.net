@@ -6,8 +6,8 @@ using Frameio.NET.Models;
 
 namespace Frameio.NET.Interfaces
 {
-    public interface IApiClient {
-
+    public interface IApiClient
+    {
         /// <summary>
         /// Returns a paged 
         /// </summary>

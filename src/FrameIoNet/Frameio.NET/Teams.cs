@@ -9,7 +9,8 @@ namespace Frameio.NET
     {
         private readonly IApiClient _client;
 
-        public Teams(IApiClient client) {
+        public Teams(IApiClient client)
+        {
             _client = client;
         }
 

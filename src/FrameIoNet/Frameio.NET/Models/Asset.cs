@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 
 namespace Frameio.NET.Models
 {
-    [Serializable]
     public class Asset
     {
         public string Id { get; set; }

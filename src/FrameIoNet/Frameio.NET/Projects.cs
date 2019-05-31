@@ -9,7 +9,8 @@ namespace Frameio.NET
     {
         private readonly IApiClient _client;
 
-        public Projects(IApiClient client) {
+        public Projects(IApiClient client)
+        {
             _client = client;
         }
 

@@ -7,11 +7,13 @@ using Newtonsoft.Json;
 
 namespace Frameio.NET
 {
-    public class Assets : IAssets {
+    public class Assets : IAssets
+    {
 
         private readonly IApiClient _client;
 
-        public Assets(IApiClient client) {
+        public Assets(IApiClient client)
+        {
             _client = client;
         }
 
