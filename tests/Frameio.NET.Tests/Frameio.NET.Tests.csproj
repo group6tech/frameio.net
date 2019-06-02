@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FrameIoNet\Frameio.NET\Frameio.NET.csproj" />
+    <ProjectReference Include="..\..\src\Frameio.NET\Frameio.NET.csproj" />
   </ItemGroup>
 
 </Project>
