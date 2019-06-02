@@ -1,4 +1,6 @@
-﻿namespace Frameio.NET.Interfaces
+﻿using Frameio.NET.Interfaces;
+
+namespace Frameio.NET
 {
     interface IFrameIoClient
     {
