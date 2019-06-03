@@ -11,9 +11,11 @@
     <Company>Group 6 Technologies Ltd</Company>
     <Authors>Group 6 Technologies</Authors>
     <ReleaseVersion>0.1.0</ReleaseVersion>
-    <PackageVersion>0.1.0-beta</PackageVersion>
     <PackageId>Frameio.NET</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>0.1.1-beta</Version>
+    <Copyright>Group 6 Technologies Ltd</Copyright>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
