@@ -39,7 +39,7 @@ namespace Frameio.NET
             HttpResponseMessage response = await _client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
 
-            return _client.ParseResponse<Asset>(response.StatusCode, content);
+            return _client.ParseJsonResponse<Asset>(response.StatusCode, content);
         }
 
         public async Task<string> UploadAsset(string url, byte[] bytes, string contentType)
@@ -57,7 +57,7 @@ namespace Frameio.NET
 
             var content = await response.Content.ReadAsStringAsync();
 
-            return _client.ParseResponse<string>(response.StatusCode, content);
+            return _client.ParseXmlResponse(response.StatusCode, content);
         }
     }
 }

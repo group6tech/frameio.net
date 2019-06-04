@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Xml.Serialization;
 using Frameio.NET.Models;
 using Newtonsoft.Json;
 
@@ -9,7 +11,7 @@ namespace Frameio.NET.Parsers
 {
     public class ResponseParser
     {
-        public T ParseResponse<T>(HttpStatusCode statusCode, string response)
+        public T ParseJsonResponse<T>(HttpStatusCode statusCode, string response)
         {
             switch (statusCode)
             {
@@ -31,12 +33,25 @@ namespace Frameio.NET.Parsers
             }
         }
 
+        public string ParseXmlResponse(HttpStatusCode statusCode, string response)
+        {
+            if (statusCode == HttpStatusCode.OK) {
+                return response;
+            }
+
+            TextReader reader = new StringReader(response);
+            XmlSerializer contentXmlSerializer = new XmlSerializer(typeof(XmlError));
+
+            XmlError xmlErrorResponse = (XmlError)contentXmlSerializer.Deserialize(reader);
+            throw new FrameioException((int)statusCode, null, xmlErrorResponse.Message);
+        }
+
         public PagedResult<T> ParsePagedResponse<T>(HttpResponseHeaders headers, HttpStatusCode statusCode, string response)
         {
             PagedResult<T> pagedResult = new PagedResult<T>();
 
             pagedResult.Paging = ParseHeader(headers);
-            pagedResult.Results = ParseResponse<IEnumerable<T>>(statusCode, response);
+            pagedResult.Results = ParseJsonResponse<IEnumerable<T>>(statusCode, response);
 
             return pagedResult;
         }
@@ -73,5 +88,6 @@ namespace Frameio.NET.Parsers
 
             return paging;
         }
+
     }
 }

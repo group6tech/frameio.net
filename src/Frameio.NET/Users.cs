@@ -22,7 +22,7 @@ namespace Frameio.NET
             HttpResponseMessage response = await _client.SendAsync(request);
             string content = await response.Content.ReadAsStringAsync();
 
-            return _client.ParseResponse<User>(response.StatusCode, content);
+            return _client.ParseJsonResponse<User>(response.StatusCode, content);
         }
     }
 }

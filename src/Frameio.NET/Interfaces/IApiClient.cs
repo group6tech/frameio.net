@@ -19,13 +19,22 @@ namespace Frameio.NET.Interfaces
         PagedResult<T> ParsePagedResponse<T>(HttpResponseHeaders headers, HttpStatusCode statusCode, string response);
 
         /// <summary>
-        /// Parse a response and returns T
+        /// Parse a json response and returns T
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="statusCode"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        T ParseResponse<T>(HttpStatusCode statusCode, string response);
+        T ParseJsonResponse<T>(HttpStatusCode statusCode, string response);
+
+        /// <summary>
+        /// Parse an Xml response and returns T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="statusCode"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        string ParseXmlResponse(HttpStatusCode statusCode, string response);
 
         /// <summary>
         /// Send an HTTP request and returns the response

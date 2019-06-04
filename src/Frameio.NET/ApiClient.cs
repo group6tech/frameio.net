@@ -32,9 +32,14 @@ namespace Frameio.NET {
             return _responseParser.ParsePagedResponse<T>(headers, statusCode, response);
         }
 
-        public T ParseResponse<T>(HttpStatusCode statusCode, string response)
+        public T ParseJsonResponse<T>(HttpStatusCode statusCode, string response)
         {
-            return _responseParser.ParseResponse<T>(statusCode, response);
+            return _responseParser.ParseJsonResponse<T>(statusCode, response);
+        }
+
+        public string ParseXmlResponse(HttpStatusCode statusCode, string response)
+        {
+            return _responseParser.ParseXmlResponse(statusCode, response);
         }
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
