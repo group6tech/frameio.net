@@ -1,10 +1,12 @@
 # frameio.net
 .NET library for the Frame.io API
 
-## Sample Usage
-The examples below show how to use the FameioClient.
+[![Build Status](https://dev.azure.com/group6tech/frameio.net/_apis/build/status/group6tech.frameio.net.build?branchName=master)](https://dev.azure.com/group6tech/frameio.net/_build/latest?definitionId=14&branchName=master)
 
-`var frameioclient = new Frameio.NET.FameioClient(myHttpClient);`
+## Sample Usage
+The examples below show how to use the FrameioClient.
+
+`var frameioclient = new Frameio.NET.FrameioClient(myHttpClient);`
 
 Intialzie with your authentication token. This token will be used with all calls requiring an authentication token.
 
@@ -23,15 +25,15 @@ List all the Teams for the given AccountId
 `var teams = await frameioclient.Teams.GetTeams(AccountId);`
 
 Parameters
-- string AccountId - the Account Id for the teams 
+- string AccountId - the Account Id for the teams
 
-Optional Parameters 
+Optional Parameters
 
 - int pageSize - the number of items per page to return
 
 - int page - the page number to return
 
-returns a PagedResult of Teams 
+returns a PagedResult of Teams
 
 ### Projects
 Get all the projects for the given Team Id
@@ -41,13 +43,13 @@ Get all the projects for the given Team Id
 Parameters
 - string TeamId - the Team Id for the Projects
 
-Optional Parameters 
+Optional Parameters
 
 - int pageSize - the number of items per page to return
 
 - int page - the page number to return
 
-returns a PagedResult of Projects 
+returns a PagedResult of Projects
 
 
 ### Project Assets
@@ -58,13 +60,13 @@ List all the assets for a Project
 Parameters
 - string RootAssetId - the root Asset Id for the Project
 
-Optional Parameters 
+Optional Parameters
 
 - int pageSize - the number of items per page to return
 
 - int page - the page number to return
 
-returns a PagedResult of Assets 
+returns a PagedResult of Assets
 
 ### Creating an Asset
 
