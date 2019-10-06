@@ -3,7 +3,7 @@ using Frameio.NET.Interfaces;
 
 namespace Frameio.NET
 {
-    public class FameioClient : IFrameIoClient
+    public class FrameioClient : IFrameIoClient
     {
         private readonly IApiClient _apiClient;
 
@@ -23,7 +23,7 @@ namespace Frameio.NET
 
         public IUsers Users => _users;
 
-        public FameioClient(HttpClient client)
+        public FrameioClient(HttpClient client)
         {
             _apiClient = new ApiClient(client);
             _assets = new Assets(_apiClient);
