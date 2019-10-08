@@ -13,7 +13,7 @@
     <ReleaseVersion>0.1.0</ReleaseVersion>
     <PackageId>Frameio.NET</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>0.2.0-beta</Version>
+    <Version>0.2.1-beta</Version>
     <Copyright>Group 6 Technologies Ltd</Copyright>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
