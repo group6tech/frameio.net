@@ -22,7 +22,6 @@ namespace Frameio.NET {
 
             _client = client;
             _client.BaseAddress = new Uri("https://applications.frame.io");
-            _client.DefaultRequestHeaders.Add("User-Agent", "Frameio.Net");
 
             _responseParser = new ResponseParser();
         }
@@ -54,6 +53,7 @@ namespace Frameio.NET {
                 return;
             }
 
+            request.Headers.Add("User-Agent", "Frameio.Net");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationToken);
         }
 
