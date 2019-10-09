@@ -19,10 +19,7 @@ namespace Frameio.NET {
         public ApiClient(HttpClient client)
         {
             _authorizationToken = string.Empty;
-
             _client = client;
-            _client.BaseAddress = new Uri("https://applications.frame.io");
-
             _responseParser = new ResponseParser();
         }
 
@@ -43,6 +40,7 @@ namespace Frameio.NET {
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
+            request.RequestUri = new Uri($"https://applications.frame.io{request.RequestUri.ToString()}");
             return await _client.SendAsync(request);
         }
 
