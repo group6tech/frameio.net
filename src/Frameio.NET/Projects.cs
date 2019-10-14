@@ -14,6 +14,17 @@ namespace Frameio.NET
             _client = client;
         }
 
+        public async Task<Project> GetProject(string projectId)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/v2/projects/${projectId}");
+            _client.SetAuthorizationHeader(request);
+
+            var response = await _client.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
+
+            return _client.ParseJsonResponse<Project>(response.StatusCode, content);
+        }
+
         public async Task<PagedResult<Project>> GetProjects(string teamId, int pageSize = 10, int page = 1)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"/v2/teams/{teamId}/projects?page_size={pageSize}&page={page}");
