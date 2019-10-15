@@ -16,7 +16,7 @@ namespace Frameio.NET
 
         public async Task<Project> GetProject(string projectId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/v2/projects/${projectId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/v2/projects/{projectId}");
             _client.SetAuthorizationHeader(request);
 
             var response = await _client.SendAsync(request);
