@@ -77,7 +77,7 @@ namespace Frameio.NET.Tests
 
             Projects projectClient = new Projects(client);
             string fakeTeamId = Guid.NewGuid().ToString("D");
-            PagedResult<Project> pagedAssetsResult = await projectClient.GetProjects(fakeTeamId);
+            PagedResult<Project> pagedAssetsResult = await projectClient.GetProjects(fakeTeamId, 1);
 
             Assert.Equal(4, pagedAssetsResult.Results.Count());
             Assert.Equal(1, pagedAssetsResult.Paging.TotalPages);

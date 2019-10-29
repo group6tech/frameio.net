@@ -16,9 +16,9 @@ namespace Frameio.NET.Interfaces
         /// Returns a paged list of projects for the given teamId
         /// </summary>
         /// <param name="teamId"></param>
-        /// <param name="pageSize"></param>
         /// <param name="page"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
-        Task<PagedResult<Project>> GetProjects(string teamId, int pageSize = 10, int page = 1);
+        Task<PagedResult<Project>> GetProjects(string teamId, int page, int pageSize = 10);
     }
 }
