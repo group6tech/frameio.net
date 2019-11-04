@@ -30,7 +30,7 @@ namespace Frameio.NET
 
         public async Task<Asset> CreateAsset(string parentId, CreateAssetRequest assetRequest)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"v2/assets/{parentId}/children");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"/v2/assets/{parentId}/children");
             _client.SetAuthorizationHeader(request);
 
             string serialized = JsonConvert.SerializeObject(assetRequest);
