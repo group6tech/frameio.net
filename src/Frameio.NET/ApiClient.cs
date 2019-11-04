@@ -40,7 +40,10 @@ namespace Frameio.NET {
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
-            request.RequestUri = new Uri($"https://applications.frame.io{request.RequestUri.ToString()}");
+            if (!request.RequestUri.ToString().StartsWith("https://"))
+            {
+                request.RequestUri = new Uri($"https://applications.frame.io{request.RequestUri.ToString()}");
+            }
             return await _client.SendAsync(request);
         }
 
