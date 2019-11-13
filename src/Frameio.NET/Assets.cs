@@ -1,4 +1,8 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.IO.MemoryMappedFiles;
+using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Frameio.NET.Interfaces;
@@ -58,6 +62,56 @@ namespace Frameio.NET
             var content = await response.Content.ReadAsStringAsync();
 
             return _client.ParseXmlResponse(response.StatusCode, content);
+        }
+
+        public string UploadAsset(Asset asset, string fileName)
+        {
+            var fileLength = new FileInfo(fileName).Length;
+            var partLength = (fileLength / asset.UploadUrls.Count()) + 1;
+            var partNo = 0;
+            long totalLengthSent = 0;
+            var parts = new List<(int partNo, long offset, long length)>();
+            while (totalLengthSent < fileLength)
+            {
+                if ((fileLength - totalLengthSent) < partLength)
+                {
+                    partLength = fileLength - totalLengthSent;
+                }
+
+                parts.Add((partNo, totalLengthSent, partLength));
+                totalLengthSent += partLength;
+                partNo++;
+            }
+
+            var threads = asset.UploadUrls.Length < 10 ? asset.UploadUrls.Length : 10;
+
+            using (var mmf = MemoryMappedFile.CreateFromFile(fileName, FileMode.Open))
+            {
+                parts.AsParallel()
+                    .WithDegreeOfParallelism(threads)
+                    .ForAll(part =>
+                    {
+                        using (var viewStream = mmf.CreateViewStream(part.offset, part.length))
+                        {
+                            var uri = asset.UploadUrls[part.partNo];
+                            var content = new StreamContent(viewStream);
+
+                            var request = new HttpRequestMessage(HttpMethod.Put, uri)
+                            {
+                                Content = content
+                            };
+                            request.Content.Headers.Add("x-amz-acl", "private");
+
+                            var response = _client.SendAsync(request).Result;
+                            var responseString = response.Content.ReadAsStringAsync().Result;
+                            var responseObject = _client.ParseXmlResponse(response.StatusCode, responseString);
+
+                            viewStream.Close();
+                        }
+                    });
+            }
+
+            return string.Empty;
         }
     }
 }

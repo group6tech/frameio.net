@@ -30,5 +30,6 @@ namespace Frameio.NET.Interfaces
         /// <param name="contentType"></param>
         /// <returns></returns>
         Task<string> UploadAsset(string url, byte[] bytes, string contentType);
+        string UploadAsset(Asset asset, string fileName);
     }
 }
