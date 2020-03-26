@@ -66,7 +66,7 @@ namespace Frameio.NET.Tests
 
             Teams teamsClient = new Teams(client);
             string fakeAccountId = Guid.NewGuid().ToString("D");
-            PagedResult<Team> pagedAssetsResult = await teamsClient.GetTeams(fakeAccountId);
+            PagedResult<Team> pagedAssetsResult = await teamsClient.GetTeams(fakeAccountId, 1);
 
             Assert.Equal(3, pagedAssetsResult.Results.Count());
             Assert.Equal(1, pagedAssetsResult.Paging.TotalPages);
