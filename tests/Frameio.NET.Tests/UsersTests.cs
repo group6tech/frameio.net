@@ -19,11 +19,13 @@ namespace Frameio.NET.Tests
             string userEmail = "name@domain.com";
             string userName = "Current User";
 
-            User user = new User();
-            user.Id = userId;
-            user.AccountId = userAccountId;
-            user.Email = userEmail;
-            user.Name = userName;
+            User user = new User
+            {
+                Id = userId,
+                AccountId = userAccountId,
+                Email = userEmail,
+                Name = userName
+            };
 
             HttpResponseMessage responseMessage = new HttpResponseMessage
             {
@@ -33,8 +35,10 @@ namespace Frameio.NET.Tests
 
             FakeHttpMessageHandler fakeHttpMessageHandler = new FakeHttpMessageHandler(responseMessage);
 
-            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler);
-            fakeHttpClient.BaseAddress = new Uri("http://Fake.domain.com");
+            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler)
+            {
+                BaseAddress = new Uri("http://Fake.domain.com")
+            };
             ApiClient client = new ApiClient(fakeHttpClient);
 
             Users usersClient = new Users(client);
