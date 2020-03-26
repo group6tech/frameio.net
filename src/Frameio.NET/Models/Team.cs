@@ -19,7 +19,7 @@ namespace Frameio.NET.Models
         [JsonProperty("project_count")]
         public int ProjectCount { get; set; }
 
-        public int Storage { get; set; }
+        public long Storage { get; set; }
 
     }
 }
