@@ -42,7 +42,7 @@ namespace Frameio.NET {
         {
             if (!request.RequestUri.ToString().StartsWith("https://"))
             {
-                request.RequestUri = new Uri($"https://applications.frame.io{request.RequestUri.ToString()}");
+                request.RequestUri = new Uri($"https://api.frame.io{request.RequestUri}");
             }
             return await _client.SendAsync(request);
         }
