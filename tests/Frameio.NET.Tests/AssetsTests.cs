@@ -17,46 +17,48 @@ namespace Frameio.NET.Tests
         [Fact]
         public async Task GetChildren_Should_Return_3_Assets()
         {
-            List<Asset> assetsList = new List<Asset>();
-            assetsList.Add(new Asset
+            List<Asset> assetsList = new List<Asset>
             {
-                Name = "Asset 1",
-                Type = "",
-                AssetType = "",
-                Id = Guid.NewGuid().ToString("D"),
-                Label = "My Label for Asset 1",
-                Original = "",
-                ParentId = Guid.NewGuid().ToString("D"),
-                ProjectId = Guid.NewGuid().ToString("D"),
-                UploadUrls = new string[] { },
-                ViewCount = 0
-            });
-            assetsList.Add(new Asset
-            {
-                Name = "Asset 2",
-                Type = "",
-                AssetType = "",
-                Id = Guid.NewGuid().ToString("D"),
-                Label = "My Label for Asset 2",
-                Original = "",
-                ParentId = Guid.NewGuid().ToString("D"),
-                ProjectId = Guid.NewGuid().ToString("D"),
-                UploadUrls = new string[] { },
-                ViewCount = 0
-            });
-            assetsList.Add(new Asset
-            {
-                Name = "Asset 3",
-                Type = "",
-                AssetType = "",
-                Id = Guid.NewGuid().ToString("D"),
-                Label = "My Label for Asset 3",
-                Original = "",
-                ParentId = Guid.NewGuid().ToString("D"),
-                ProjectId = Guid.NewGuid().ToString("D"),
-                UploadUrls = new string[] { },
-                ViewCount = 0
-            });
+                new Asset
+                {
+                    Name = "Asset 1",
+                    Type = "",
+                    AssetType = "",
+                    Id = Guid.NewGuid().ToString("D"),
+                    Label = "My Label for Asset 1",
+                    Original = "",
+                    ParentId = Guid.NewGuid().ToString("D"),
+                    ProjectId = Guid.NewGuid().ToString("D"),
+                    UploadUrls = Array.Empty<string>(),
+                    ViewCount = 0
+                },
+                new Asset
+                {
+                    Name = "Asset 2",
+                    Type = "",
+                    AssetType = "",
+                    Id = Guid.NewGuid().ToString("D"),
+                    Label = "My Label for Asset 2",
+                    Original = "",
+                    ParentId = Guid.NewGuid().ToString("D"),
+                    ProjectId = Guid.NewGuid().ToString("D"),
+                    UploadUrls = Array.Empty<string>(),
+                    ViewCount = 0
+                },
+                new Asset
+                {
+                    Name = "Asset 3",
+                    Type = "",
+                    AssetType = "",
+                    Id = Guid.NewGuid().ToString("D"),
+                    Label = "My Label for Asset 3",
+                    Original = "",
+                    ParentId = Guid.NewGuid().ToString("D"),
+                    ProjectId = Guid.NewGuid().ToString("D"),
+                    UploadUrls = Array.Empty<string>(),
+                    ViewCount = 0
+                }
+            };
 
             HttpResponseMessage responseMessage = new HttpResponseMessage
             {
@@ -69,14 +71,16 @@ namespace Frameio.NET.Tests
 
             FakeHttpMessageHandler fakeHttpMessageHandler = new FakeHttpMessageHandler(responseMessage);
 
-            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler);
-            fakeHttpClient.BaseAddress = new Uri("http://Fake.domain.com");
+            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler)
+            {
+                BaseAddress = new Uri("http://Fake.domain.com")
+            };
 
             ApiClient client = new ApiClient(fakeHttpClient);
             Assets assetsClient = new Assets(client);
 
             string fakeAssetId = Guid.NewGuid().ToString("D");
-            PagedResult<Asset> pagedAssetsResult = await assetsClient.GetChildren(fakeAssetId);
+            PagedResult<Asset> pagedAssetsResult = await assetsClient.GetChildren(fakeAssetId, 1);
 
             Assert.Equal(3, pagedAssetsResult.Results.Count());
             Assert.Equal(1, pagedAssetsResult.Paging.TotalPages);
@@ -118,8 +122,10 @@ namespace Frameio.NET.Tests
             };
             FakeHttpMessageHandler fakeHttpMessageHandler = new FakeHttpMessageHandler(responseMessage);
 
-            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler);
-            fakeHttpClient.BaseAddress = new Uri("http://Fake.domain.com");
+            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler)
+            {
+                BaseAddress = new Uri("http://Fake.domain.com")
+            };
             ApiClient client = new ApiClient(fakeHttpClient);
 
             Assets assetsClient = new Assets(client);

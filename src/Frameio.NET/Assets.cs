@@ -1,4 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.MemoryMappedFiles;
+using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Frameio.NET.Interfaces;
@@ -17,7 +22,24 @@ namespace Frameio.NET
             _client = client;
         }
 
-        public async Task<PagedResult<Asset>> GetChildren(string assetId, int pageSize = 10, int page = 1)
+        private async Task<string> UploadChunk(string url, byte[] bytes, string contentType)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, url);
+
+            ByteArrayContent byteContent = new ByteArrayContent(bytes);
+            request.Content = byteContent;
+
+            request.Content.Headers.Add("content-type", contentType);
+            request.Content.Headers.Add("x-amz-acl", "private");
+
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            return _client.ParseXmlResponse(response.StatusCode, content);
+        }
+
+        public async Task<PagedResult<Asset>> GetChildren(string assetId, int page, int pageSize = 10)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"/v2/assets/{assetId}/children?page_size={pageSize}&page={page}");
             _client.SetAuthorizationHeader(request);
@@ -42,22 +64,60 @@ namespace Frameio.NET
             return _client.ParseJsonResponse<Asset>(response.StatusCode, content);
         }
 
-        public async Task<string> UploadAsset(string url, byte[] bytes, string contentType)
+        public string UploadAsset(Asset asset, string fileName)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, url);
+            var fileLength = new FileInfo(fileName).Length;
+            var roughLength = Math.Floor((double)(fileLength / asset.UploadUrls.Length));
 
-            ByteArrayContent byteContent = new ByteArrayContent(bytes);
-            request.Content = byteContent;
+            if (roughLength > int.MaxValue)
+            {
+                throw new Exception($"Part size {roughLength} is too large, must be less than int.MaxValue.");
+            }
 
-            request.Content = byteContent;
-            request.Content.Headers.Add("content-type", contentType);
-            request.Content.Headers.Add("x-amz-acl", "private");
+            var partLength = (long)roughLength;
+            var partNo = 0;
+            long totalLengthSent = 0;
+            var parts = new List<(int partNo, long offset, long length)>();
+            while (totalLengthSent < fileLength)
+            {
+                if ((fileLength - totalLengthSent) < partLength)
+                {
+                    partLength = fileLength - totalLengthSent;
+                }
 
-            HttpResponseMessage response = await _client.SendAsync(request);
+                parts.Add((partNo, totalLengthSent, partLength));
+                totalLengthSent += partLength;
+                partNo++;
+            }
 
-            var content = await response.Content.ReadAsStringAsync();
+            if (parts.Count != asset.UploadUrls.Length)
+            {
+                throw new Exception("Invalid part count");
+            }
 
-            return _client.ParseXmlResponse(response.StatusCode, content);
+            var threads = asset.UploadUrls.Length < 10 ? asset.UploadUrls.Length : 10;
+
+            using (var mmf = MemoryMappedFile.CreateFromFile(fileName, FileMode.Open))
+            {
+                parts.AsParallel()
+                    .WithDegreeOfParallelism(threads)
+                    .ForAll(part =>
+                    {
+                        using (var viewStream = mmf.CreateViewStream(part.offset, part.length))
+                        {
+                            var uri = asset.UploadUrls[part.partNo];
+                            var content = new StreamContent(viewStream);
+
+                            var bytes = content.ReadAsByteArrayAsync().Result;
+
+                            var result = UploadChunk(uri, bytes, asset.FileType).Result;
+
+                            viewStream.Close();
+                        }
+                    });
+            }
+
+            return string.Empty;
         }
     }
 }

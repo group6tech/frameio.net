@@ -16,50 +16,52 @@ namespace Frameio.NET.Tests
         [Fact]
         public async Task GetProjects_Should_Return_PagedListOfProjectsWithOutPageLinks()
         {
-            List<Project> projectList = new List<Project>();
-
-            projectList.Add(new Project {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Project 1",
-                OwnerId = Guid.NewGuid().ToString(),
-                Private = true,
-                ProjectPreferences = new ProjectPreferences(),
-                RootAssetId = Guid.NewGuid().ToString(),
-                TeamId = Guid.NewGuid().ToString()
-            });
-
-            projectList.Add(new Project
+            List<Project> projectList = new List<Project>
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Project 2",
-                OwnerId = Guid.NewGuid().ToString(),
-                Private = true,
-                ProjectPreferences = new ProjectPreferences(),
-                RootAssetId = Guid.NewGuid().ToString(),
-                TeamId = Guid.NewGuid().ToString()
-            });
+                new Project
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Project 1",
+                    OwnerId = Guid.NewGuid().ToString(),
+                    Private = true,
+                    ProjectPreferences = new ProjectPreferences(),
+                    RootAssetId = Guid.NewGuid().ToString(),
+                    TeamId = Guid.NewGuid().ToString()
+                },
 
-            projectList.Add(new Project
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Project 3",
-                OwnerId = Guid.NewGuid().ToString(),
-                Private = true,
-                ProjectPreferences = new ProjectPreferences(),
-                RootAssetId = Guid.NewGuid().ToString(),
-                TeamId = Guid.NewGuid().ToString()
-            });
+                new Project
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Project 2",
+                    OwnerId = Guid.NewGuid().ToString(),
+                    Private = true,
+                    ProjectPreferences = new ProjectPreferences(),
+                    RootAssetId = Guid.NewGuid().ToString(),
+                    TeamId = Guid.NewGuid().ToString()
+                },
 
-            projectList.Add(new Project
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Project 4",
-                OwnerId = Guid.NewGuid().ToString(),
-                Private = true,
-                ProjectPreferences = new ProjectPreferences(),
-                RootAssetId = Guid.NewGuid().ToString(),
-                TeamId = Guid.NewGuid().ToString()
-            });
+                new Project
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Project 3",
+                    OwnerId = Guid.NewGuid().ToString(),
+                    Private = true,
+                    ProjectPreferences = new ProjectPreferences(),
+                    RootAssetId = Guid.NewGuid().ToString(),
+                    TeamId = Guid.NewGuid().ToString()
+                },
+
+                new Project
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Project 4",
+                    OwnerId = Guid.NewGuid().ToString(),
+                    Private = true,
+                    ProjectPreferences = new ProjectPreferences(),
+                    RootAssetId = Guid.NewGuid().ToString(),
+                    TeamId = Guid.NewGuid().ToString()
+                }
+            };
 
             HttpResponseMessage responseMessage = new HttpResponseMessage
             {
@@ -71,8 +73,10 @@ namespace Frameio.NET.Tests
 
             FakeHttpMessageHandler fakeHttpMessageHandler = new FakeHttpMessageHandler(responseMessage);
 
-            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler);
-            fakeHttpClient.BaseAddress = new Uri("http://Fake.domain.com");
+            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler)
+            {
+                BaseAddress = new Uri("http://Fake.domain.com")
+            };
             ApiClient client = new ApiClient(fakeHttpClient);
 
             Projects projectClient = new Projects(client);

@@ -9,7 +9,7 @@ namespace Frameio.NET.Models
         public string Description { get; set; }
 
         [JsonProperty("filesize")]
-        public int FileSize { get; set; }
+        public long FileSize { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

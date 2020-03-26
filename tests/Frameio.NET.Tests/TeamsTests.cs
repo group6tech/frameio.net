@@ -16,39 +16,41 @@ namespace Frameio.NET.Tests
         [Fact]
         public async Task GetTeams_Should_Return_PagedListOfTeamsWithOutPageLinks()
         {
-            List<Team> teamsList = new List<Team>();
-            teamsList.Add(new Team
+            List<Team> teamsList = new List<Team>
             {
-                Id = Guid.NewGuid().ToString(),
-                Access = "private",
-                CollaboratorCount = 0,
-                FileCount = 10,
-                Name = "Team 1",
-                ProjectCount = 1,
-                Storage = 0
-            });
+                new Team
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Access = "private",
+                    CollaboratorCount = 0,
+                    FileCount = 10,
+                    Name = "Team 1",
+                    ProjectCount = 1,
+                    Storage = 0
+                },
 
-            teamsList.Add(new Team
-            {
-                Id = Guid.NewGuid().ToString(),
-                Access = "private",
-                CollaboratorCount = 0,
-                FileCount = 10,
-                Name = "Team 2",
-                ProjectCount = 1,
-                Storage = 0
-            });
+                new Team
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Access = "private",
+                    CollaboratorCount = 0,
+                    FileCount = 10,
+                    Name = "Team 2",
+                    ProjectCount = 1,
+                    Storage = 0
+                },
 
-            teamsList.Add(new Team
-            {
-                Id = Guid.NewGuid().ToString(),
-                Access = "private",
-                CollaboratorCount = 0,
-                FileCount = 10,
-                Name = "Team 3",
-                ProjectCount = 1,
-                Storage = 0
-            });
+                new Team
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Access = "private",
+                    CollaboratorCount = 0,
+                    FileCount = 10,
+                    Name = "Team 3",
+                    ProjectCount = 1,
+                    Storage = 0
+                }
+            };
 
             HttpResponseMessage responseMessage = new HttpResponseMessage
             {
@@ -60,13 +62,15 @@ namespace Frameio.NET.Tests
 
             FakeHttpMessageHandler fakeHttpMessageHandler = new FakeHttpMessageHandler(responseMessage);
 
-            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler);
-            fakeHttpClient.BaseAddress = new Uri("http://Fake.domain.com");
+            HttpClient fakeHttpClient = new HttpClient(fakeHttpMessageHandler)
+            {
+                BaseAddress = new Uri("http://Fake.domain.com")
+            };
             ApiClient client = new ApiClient(fakeHttpClient);
 
             Teams teamsClient = new Teams(client);
             string fakeAccountId = Guid.NewGuid().ToString("D");
-            PagedResult<Team> pagedAssetsResult = await teamsClient.GetTeams(fakeAccountId);
+            PagedResult<Team> pagedAssetsResult = await teamsClient.GetTeams(fakeAccountId, 1);
 
             Assert.Equal(3, pagedAssetsResult.Results.Count());
             Assert.Equal(1, pagedAssetsResult.Paging.TotalPages);

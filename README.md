@@ -3,7 +3,10 @@
 
 [![Build Status](https://dev.azure.com/group6tech/frameio.net/_apis/build/status/group6tech.frameio.net.build?branchName=master)](https://dev.azure.com/group6tech/frameio.net/_build/latest?definitionId=14&branchName=master)
 
+
+
 ## Sample Usage
+
 The examples below show how to use the FrameioClient.
 
 `var frameioclient = new Frameio.NET.FrameioClient(myHttpClient);`
@@ -12,91 +15,104 @@ Intialzie with your authentication token. This token will be used with all calls
 
 `frameioclient.Initialize("your token");`
 
+
+
 ### Users
+
 To get details about the current user
 
 `var user = await frameioclient.Users.GetCurrentUser();`
 
-Returns a User
+Returns `Task<User>`.
+
+
 
 ### Teams
+
 List all the Teams for the given AccountId
 
-`var teams = await frameioclient.Teams.GetTeams(AccountId);`
+`var teams = await frameioclient.Teams.GetTeams(AccountId, 1);`
 
 Parameters
-- string AccountId - the Account Id for the teams
+- `string AccountId` - the Account Id for the teams
+- `int page` - the page number to return
 
 Optional Parameters
+- `int pageSize` - the number of items per page to return
 
-- int pageSize - the number of items per page to return
+Returns `Task<PagedResult<Team>>`.
 
-- int page - the page number to return
 
-returns a PagedResult of Teams
 
 ### Projects
+
 Get all the projects for the given Team Id
 
-`var projects = await frameioclient.Projects.GetProjects(teamId);`
+`var projects = await frameioclient.Projects.GetProjects(teamId, 1);`
 
 Parameters
-- string TeamId - the Team Id for the Projects
+- `string TeamId` - the Team Id for the Projects
+- `int page` - the page number to return
 
 Optional Parameters
+- `int pageSize` - the number of items per page to return
 
-- int pageSize - the number of items per page to return
+Returns `Task<PagedResult<Project>>`.
 
-- int page - the page number to return
-
-returns a PagedResult of Projects
 
 
 ### Project Assets
+
 List all the assets for a Project
 
 `var assets = await frameioclient.Assets.GetChildren(rootAssetId);`
 
 Parameters
-- string RootAssetId - the root Asset Id for the Project
+- `string RootAssetId` - the root Asset Id for the Project
+- `int page` - the page number to return
 
 Optional Parameters
+- `int pageSize` - the number of items per page to return
 
-- int pageSize - the number of items per page to return
+Returns `Task<PagedResult<Asset>>`.
 
-- int page - the page number to return
 
-returns a PagedResult of Assets
 
 ### Creating an Asset
 
-`var result = await frameioclient.Assets.CreateAsset("parentId",
+```
+var result = await frameioclient.Assets.CreateAsset("parentId",
     new CreateAssetRequest
     {
-        Description = "Gravatar",
+        Description = "My Video",
         FileSize = 2048,
-        MimeType = "image/png",
-        Name = "gravatar.png",
+        MimeType = "video/mp4",
+        Name = "quicktime/mp4",
         Type = FileType.File
-    });`
+    });
+```
 
 Parameters
-- string ParentId - This can be the Id of an existing Asset or the Root Asset Id for a Project.
-- CreateAssetRequest - the request model containing the details of the Asset
+- `string ParentId` - This can be the Id of an existing Asset or the Root Asset Id for a Project.
+- `CreateAssetRequest` - the request model containing the details of the Asset
 
-Returns an Asset
+Returns `Task<Asset>`.
+
+
 
 ### Uploading an Asset
+
 Upload an asset
 
 Assets are uploaded in byte chunks. Once you create an Asset you will be provide with the a list of urls used to upload your media.
 
-`await frameioclient.Assets.UploadAsset(url, buffer, "image/png");`
+`await frameioclient.Assets.UploadAsset(asset, @"C:\my\video.mp4");`
 
 Parameters
-- string url - the upload url provided by the CreateAsset result.
-- byte[] - a byte array containing a chunk of your media to be uploaded
-- contentType - the content type of the file, this used as part of the http request headers
+- `Asset asset` - the asset created with `CreateAsset()`
+- `string fileName` - the full path to the file to upload
+
+
 
 ## Getting help
 
