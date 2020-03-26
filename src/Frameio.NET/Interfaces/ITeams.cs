@@ -11,7 +11,7 @@ namespace Frameio.NET.Interfaces
         /// <param name="pageSize"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        Task<PagedResult<Team>> GetTeams(int pageSize = 10, int page = 1);
+        Task<PagedResult<Team>> GetTeams(int page, int pageSize = 10);
 
         /// <summary>
         /// Returns a list list of Teams for the given accountId
@@ -20,6 +20,6 @@ namespace Frameio.NET.Interfaces
         /// <param name="pageSize"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        Task<PagedResult<Team>> GetTeams(string accountId, int pageSize = 10, int page = 1);
+        Task<PagedResult<Team>> GetTeams(string accountId, int page, int pageSize = 10);
     }
 }
