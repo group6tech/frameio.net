@@ -16,6 +16,8 @@ namespace Frameio.NET.Models
         [JsonProperty("asset_type")]
         public string AssetType { get; set; }
 
+        public string FileType { get; set; }
+
         public string Label { get; set; }
 
         public string Name { get; set; }

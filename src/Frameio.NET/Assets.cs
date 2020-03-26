@@ -53,7 +53,6 @@ namespace Frameio.NET
             ByteArrayContent byteContent = new ByteArrayContent(bytes);
             request.Content = byteContent;
 
-            request.Content = byteContent;
             request.Content.Headers.Add("content-type", contentType);
             request.Content.Headers.Add("x-amz-acl", "private");
 
@@ -67,7 +66,13 @@ namespace Frameio.NET
         public string UploadAsset(Asset asset, string fileName)
         {
             var fileLength = new FileInfo(fileName).Length;
-            var partLength = (fileLength / asset.UploadUrls.Count()) + 1;
+            var partLength = fileLength / (asset.UploadUrls.Length - 1);
+
+            if (partLength > int.MaxValue)
+            {
+                throw new System.Exception($"Part size {partLength} is too large, must be less than int.MaxValue.");
+            }
+
             var partNo = 0;
             long totalLengthSent = 0;
             var parts = new List<(int partNo, long offset, long length)>();
@@ -96,15 +101,9 @@ namespace Frameio.NET
                             var uri = asset.UploadUrls[part.partNo];
                             var content = new StreamContent(viewStream);
 
-                            var request = new HttpRequestMessage(HttpMethod.Put, uri)
-                            {
-                                Content = content
-                            };
-                            request.Content.Headers.Add("x-amz-acl", "private");
+                            var bytes = content.ReadAsByteArrayAsync().Result;
 
-                            var response = _client.SendAsync(request).Result;
-                            var responseString = response.Content.ReadAsStringAsync().Result;
-                            var responseObject = _client.ParseXmlResponse(response.StatusCode, responseString);
+                            var result = UploadAsset(uri, bytes, asset.FileType).Result;
 
                             viewStream.Close();
                         }
