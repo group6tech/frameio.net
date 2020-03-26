@@ -80,7 +80,7 @@ namespace Frameio.NET.Tests
             Assets assetsClient = new Assets(client);
 
             string fakeAssetId = Guid.NewGuid().ToString("D");
-            PagedResult<Asset> pagedAssetsResult = await assetsClient.GetChildren(fakeAssetId);
+            PagedResult<Asset> pagedAssetsResult = await assetsClient.GetChildren(fakeAssetId, 1);
 
             Assert.Equal(3, pagedAssetsResult.Results.Count());
             Assert.Equal(1, pagedAssetsResult.Paging.TotalPages);
