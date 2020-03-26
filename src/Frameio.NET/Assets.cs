@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
@@ -66,13 +67,14 @@ namespace Frameio.NET
         public string UploadAsset(Asset asset, string fileName)
         {
             var fileLength = new FileInfo(fileName).Length;
-            var partLength = fileLength / (asset.UploadUrls.Length - 1);
+            var roughLength = Math.Floor((double)(fileLength / asset.UploadUrls.Length));
 
-            if (partLength > int.MaxValue)
+            if (roughLength > int.MaxValue)
             {
-                throw new System.Exception($"Part size {partLength} is too large, must be less than int.MaxValue.");
+                throw new Exception($"Part size {roughLength} is too large, must be less than int.MaxValue.");
             }
 
+            var partLength = (long)roughLength;
             var partNo = 0;
             long totalLengthSent = 0;
             var parts = new List<(int partNo, long offset, long length)>();
@@ -86,6 +88,11 @@ namespace Frameio.NET
                 parts.Add((partNo, totalLengthSent, partLength));
                 totalLengthSent += partLength;
                 partNo++;
+            }
+
+            if (parts.Count != asset.UploadUrls.Length)
+            {
+                throw new Exception("Invalid part count");
             }
 
             var threads = asset.UploadUrls.Length < 10 ? asset.UploadUrls.Length : 10;
