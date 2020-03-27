@@ -1,16 +1,11 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
 
 namespace Frameio.NET.Enums
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(FileTypeEnumConverter))]
     public enum FileType
     {
-        [EnumMember(Value = "file")]
         File,
-
-        [EnumMember(Value = "folder")]
         Folder
     }
 }

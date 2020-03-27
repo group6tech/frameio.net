@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Frameio.NET.Interfaces;
+using Frameio.NET.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Frameio.NET.Interfaces;
-using Frameio.NET.Models;
-using Newtonsoft.Json;
 
 namespace Frameio.NET
 {
@@ -55,7 +55,7 @@ namespace Frameio.NET
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"/v2/assets/{parentId}/children");
             _client.SetAuthorizationHeader(request);
 
-            string serialized = JsonConvert.SerializeObject(assetRequest);
+            string serialized = JsonSerializer.Serialize(assetRequest);
             request.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await _client.SendAsync(request);

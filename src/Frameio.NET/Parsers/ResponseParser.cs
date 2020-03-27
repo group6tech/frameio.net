@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Frameio.NET.Models;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Xml.Serialization;
-using Frameio.NET.Models;
-using Newtonsoft.Json;
 
 namespace Frameio.NET.Parsers
 {
-    public class ResponseParser
+    public static class ResponseParser
     {
-        public T ParseJsonResponse<T>(HttpStatusCode statusCode, string response)
+        public static T ParseJsonResponse<T>(HttpStatusCode statusCode, string response)
         {
             switch (statusCode)
             {
                 case HttpStatusCode.OK:
-                    return JsonConvert.DeserializeObject<T>(response);
+                    return JsonSerializer.Deserialize<T>(response);
                 case (HttpStatusCode)429:
                 case HttpStatusCode.NotFound:
                 case HttpStatusCode.Unauthorized:
@@ -25,15 +25,15 @@ namespace Frameio.NET.Parsers
                 case HttpStatusCode.InternalServerError:
                     throw new FrameioException((int)statusCode, null, response);
                 case (HttpStatusCode)422:
-                    ErrorResponse errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                    ErrorResponse errorResponse = JsonSerializer.Deserialize<ErrorResponse>(response);
                     throw new FrameioException(errorResponse.Code, errorResponse.Errors, errorResponse.Message);
                 default:
-                    ErrorResponse defaultResponse = JsonConvert.DeserializeObject<ErrorResponse>(response);
+                    ErrorResponse defaultResponse = JsonSerializer.Deserialize<ErrorResponse>(response);
                     throw new FrameioException(defaultResponse.Code, defaultResponse.Errors, defaultResponse.Message);
             }
         }
 
-        public string ParseXmlResponse(HttpStatusCode statusCode, string response)
+        public static string ParseXmlResponse(HttpStatusCode statusCode, string response)
         {
             if (statusCode == HttpStatusCode.OK) {
                 return response;
@@ -46,17 +46,18 @@ namespace Frameio.NET.Parsers
             throw new FrameioException((int)statusCode, null, xmlErrorResponse.Message);
         }
 
-        public PagedResult<T> ParsePagedResponse<T>(HttpResponseHeaders headers, HttpStatusCode statusCode, string response)
+        public static PagedResult<T> ParsePagedResponse<T>(HttpResponseHeaders headers, HttpStatusCode statusCode, string response)
         {
-            PagedResult<T> pagedResult = new PagedResult<T>();
-
-            pagedResult.Paging = ParseHeader(headers);
-            pagedResult.Results = ParseJsonResponse<IEnumerable<T>>(statusCode, response);
+            PagedResult<T> pagedResult = new PagedResult<T>
+            {
+                Paging = ParseHeader(headers),
+                Results = ParseJsonResponse<IEnumerable<T>>(statusCode, response)
+            };
 
             return pagedResult;
         }
 
-        public Paging ParseHeader(HttpResponseHeaders headers)
+        public static Paging ParseHeader(HttpResponseHeaders headers)
         {
             Paging paging = new Paging();
 

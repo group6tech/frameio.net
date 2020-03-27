@@ -12,30 +12,27 @@ namespace Frameio.NET {
     {
         private readonly HttpClient _client;
 
-        private readonly ResponseParser _responseParser;
-
         private string _authorizationToken;
 
         public ApiClient(HttpClient client)
         {
             _authorizationToken = string.Empty;
             _client = client;
-            _responseParser = new ResponseParser();
         }
 
         public PagedResult<T> ParsePagedResponse<T>(HttpResponseHeaders headers, HttpStatusCode statusCode, string response)
         {
-            return _responseParser.ParsePagedResponse<T>(headers, statusCode, response);
+            return ResponseParser.ParsePagedResponse<T>(headers, statusCode, response);
         }
 
         public T ParseJsonResponse<T>(HttpStatusCode statusCode, string response)
         {
-            return _responseParser.ParseJsonResponse<T>(statusCode, response);
+            return ResponseParser.ParseJsonResponse<T>(statusCode, response);
         }
 
         public string ParseXmlResponse(HttpStatusCode statusCode, string response)
         {
-            return _responseParser.ParseXmlResponse(statusCode, response);
+            return ResponseParser.ParseXmlResponse(statusCode, response);
         }
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)

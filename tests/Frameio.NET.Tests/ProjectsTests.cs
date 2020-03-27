@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Frameio.NET.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Frameio.NET.Models;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Frameio.NET.Tests
@@ -65,7 +65,7 @@ namespace Frameio.NET.Tests
 
             HttpResponseMessage responseMessage = new HttpResponseMessage
             {
-                Content = new StringContent(JsonConvert.SerializeObject(projectList), Encoding.UTF8, "application/json"),
+                Content = new StringContent(JsonSerializer.Serialize(projectList), Encoding.UTF8, "application/json"),
                 StatusCode = HttpStatusCode.OK
             };
             responseMessage.Headers.Add("total-pages", new List<string> { "1" });

@@ -13,14 +13,14 @@
     <ReleaseVersion>0.1.0</ReleaseVersion>
     <PackageId>Frameio.NET</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>0.6.0-beta</Version>
+    <Version>0.7.0-beta</Version>
     <Copyright>Group 6 Technologies Ltd</Copyright>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.Json" Version="4.7.1" />
   </ItemGroup>
 
 </Project>

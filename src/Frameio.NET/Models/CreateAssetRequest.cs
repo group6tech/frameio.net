@@ -1,23 +1,23 @@
 ﻿using Frameio.NET.Enums;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Frameio.NET.Models
 {
     public class CreateAssetRequest
     {
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("filesize")]
+        [JsonPropertyName("filesize")]
         public long FileSize { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public FileType Type { get; set; }
 
-        [JsonProperty("filetype")]
+        [JsonPropertyName("filetype")]
         public string MimeType { get; set; }
 
     }

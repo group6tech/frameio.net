@@ -1,24 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Frameio.NET.Models
 {
     public class Team
     {
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
+        [JsonPropertyName("access")]
         public string Access { get; set; }
 
-        [JsonProperty("file_count")]
+        [JsonPropertyName("file_count")]
         public int FileCount { get; set; }
 
-        [JsonProperty("collaborator_count")]
+        [JsonPropertyName("collaborator_count")]
         public int CollaboratorCount { get; set; }
 
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("project_count")]
+        [JsonPropertyName("project_count")]
         public int ProjectCount { get; set; }
 
+        [JsonPropertyName("storage")]
         public long Storage { get; set; }
 
     }
